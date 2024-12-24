@@ -5,13 +5,13 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบนัดหมาย</title>
+    <title>ระบบนัดหมายทำบัตรผ่านยานพาหนะ กองบิน 21</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
     <style>
         .selected {
-            background-color: #283448 !important;
+            background-color: #0e7d72 !important;
             color: white;
         }
 
@@ -119,8 +119,8 @@
 
     <div class="bg-gradient-to-r from-slate-900 to-slate-700 text-white p-10">
         <div class="max-w-md mx-auto">
-            <h1 class="text-xl font-bold">จองคิว</h1>
-            <p class="text-sm">เวลาทำการเปิด 10:00-17:00 น.</p>
+            <h1 class="text-xl font-bold">นัดหมายทำบัตรผ่านยานพาหนะ</h1>
+            <p class="text-sm">เวลาทำการเปิด 08:30-16:00 น.</p>
         </div>
     </div>
     <div class="loading-overlay" id="loadingOverlay">
@@ -136,28 +136,28 @@
 
             <!-- ฟอร์มการจอง (Step 1) -->
             <div id="step1" class="max-w-sm mx-auto">
-                <!-- เลือกบริการ -->
+                <!-- เลือกประเภท -->
                 <div class="flex space-x-4 mb-4">
                     <span class="bg-white flex items-center border rounded-xl p-2 w-32">
-                        <img src="https://img.icons8.com/?size=100&id=22128&format=png&color=000000" class="w-6 h-6 mr-1">
-                        <span class="text-black"> บริการ </span>
+                        <img src="https://img.icons8.com/emoji/48/boy-light-skin-tone.png" class="w-6 h-6 mr-1">
+                        <span class="text-black"> บุคคล </span>
                     </span>
                     <select id="service" name="service"
                         class="rounded-xl px-2 text-center bg-white border text-gray-900 block flex-1 min-w-0 w-full"
-                        placeholder="ตัวเลือกบริการ">
-                        <option value="" disabled selected>เลือกบริการ</option>
+                        placeholder="ตัวเลือกประเภท">
+                        <option value="" disabled selected>เลือกประเภท</option>
                     </select>
                 </div>
-                <!-- เลือกสถานที่ -->
+                <!-- เลือกชนิด -->
                 <div class="flex space-x-4 mb-4">
                     <span class="bg-white flex items-center border rounded-xl p-2 w-32">
-                        <img src="https://img.icons8.com/?size=100&id=Ynh2i0jcHfB4&format=png&color=000000" class="w-6 h-6 mr-1">
-                        <span class="text-black"> สาขา </span>
+                        <img src="https://https://img.icons8.com/emoji/48/automobile.png" class="w-6 h-6 mr-1">
+                        <span class="text-black"> ชนิดรถ </span>
                     </span>
                     <select id="locationservice" name="locationservice"
                         class="rounded-xl text-center bg-white border text-gray-900 block flex-1 min-w-0 w-full"
-                        placeholder="ตัวเลือกสถานที่">
-                        <option value="" disabled selected>เลือกสาขา</option>
+                        placeholder="ตัวเลือกชนิด">
+                        <option value="" disabled selected>เลือกชนิด</option>
                     </select>
                 </div>
                 <!-- ฟอร์มข้อมูลผู้ใช้ -->
@@ -268,7 +268,7 @@
 
     <script>
         // ตัวแปรสำหรับใช้กับ URL ของ Web App และ LIFF
-        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwmixdifRnOfN8qQJNDBqrnARZyToXtI2_P15ne5NKfmSlPkTL6gUnWekFlRnOCGOMp/exec'; // appscripts booking
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwDuViIrSpGPcbbgjnV3TknToQpAPPjPX8eqY5uJsZphBEFPWBw1G5P1uoHfdHpxwgD/exec'; // appscripts booking
         const WEB_APP_MEMBER_URL = 'https://script.google.com/macros/s/AKfycby2KG6x98rtofZ7MP7Le8sb7X0u5ygqka6G6WhoOCAENnFINxkyBPiVx54DgDEi9ZQx/exec'; //appscripts members
         const LIFF_ID = '2006712409-jG1a99VN';
 
@@ -280,7 +280,7 @@
         document.getElementById('step1').style.display = 'block';
         showLoading(true);
 
-        // โหลดข้อมูลเบื้องต้น เช่น รายการบริการ สถานที่ และ LIFF
+        // โหลดข้อมูลเบื้องต้น เช่น รายการประเภท ชนิด และ LIFF
         async function loadInitialData() {
             await Promise.all([fetchDropdownData(),initializeLiff()]);
             const currentDate = new Date();
@@ -377,12 +377,12 @@
 
             // ตรวจสอบการเลือกบริการและสาขา
             if (!service) {
-                showPopup('ข้อผิดพลาด', 'กรุณาเลือกบริการ ก่อนดำเนินการต่อ', 'error');
+                showPopup('ข้อผิดพลาด', 'กรุณาเลือกประเภท ก่อนดำเนินการต่อ', 'error');
                 return;
             }
 
             if (!locationservice) {
-                showPopup('ข้อผิดพลาด', 'กรุณาเลือกสาขา ก่อนดำเนินการต่อ', 'error');
+                showPopup('ข้อผิดพลาด', 'กรุณาเลือกชนิด ก่อนดำเนินการต่อ', 'error');
                 return;
             }
 
@@ -416,8 +416,8 @@
                     throw new Error('Network response was not ok');
                 }
                 const data = await response.json();
-                populateDropdown('service', data.services, 'เลือกบริการ');
-                populateDropdown('locationservice', data.locationservice, 'เลือกสาขา');
+                populateDropdown('service', data.services, 'เลือกประเภท');
+                populateDropdown('locationservice', data.locationservice, 'เลือกชนิด');
             } catch (error) {
                 console.error('There was a problem with the fetch operation:', error);
             }
@@ -542,8 +542,8 @@
                 bookButton.addEventListener('click', () => {
                     timeInput.value = time.padStart(5, '0');
                     showPopup('ยืนยันการนัดหมาย', `
-                            <p>บริการ: ${form.service.value}</p>
-                            <p>สถานที่: ${form.locationservice.value}</p>
+                            <p>ประเภทบุคคล: ${form.service.value}</p>
+                            <p>ชนิดรถ: ${form.locationservice.value}</p>
                             <p>ชื่อ-สกุล: ${form.name.value}</p>
                             <p>เบอร์ติดต่อ: ${form.phonenumber.value}</p>
                             <p>หมายเหตุ: ${form.note.value}</p>
@@ -593,8 +593,8 @@
                 return;
             }
             showPopup('<p class="text-blue-900">📆 ยืนยันการนัดหมาย</p>', `
-                    <p>บริการ: ${form.service.value}</p>
-                    <p>สถานที่: ${form.locationservice.value}</p>
+                    <p>ประเภทบุคคล: ${form.service.value}</p>
+                    <p>ชนิดรถ: ${form.locationservice.value}</p>
                     <p>ชื่อ-สกุล: ${form.name.value}</p>
                     <p>เบอร์ติดต่อ: ${form.phonenumber.value}</p>
                     <p>หมายเหตุ: ${form.note.value}</p>
